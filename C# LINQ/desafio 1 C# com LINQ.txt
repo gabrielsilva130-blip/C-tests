@@ -1,0 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class Produto
+{
+    public string Nome { get; set; }
+    public decimal Preco { get; set; }
+    public string Categoria { get; set; }
+    public int Estoque { get; set; }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        List<Produto> produtos = new List<Produto>
+        {
+            new Produto { Nome = "Notebook", Preco = 4500.00m, Categoria = "Eletronicos", Estoque = 5 },
+            new Produto { Nome = "Smartphone", Preco = 2500.00m, Categoria = "Eletronicos", Estoque = 0 },
+            new Produto { Nome = "Cadeira Gamer", Preco = 1200.00m, Categoria = "Moveis", Estoque = 2 },
+            new Produto { Nome = "Mouse", Preco = 150.00m, Categoria = "Eletronicos", Estoque = 15 },
+            new Produto { Nome = "Mesa Office", Preco = 800.00m, Categoria = "Moveis", Estoque = 4 },
+            new Produto { Nome = "Teclado Mecanico", Preco = 350.00m, Categoria = "Eletronicos", Estoque = 8 },
+            new Produto { Nome = "Luminaria", Preco = 90.00m, Categoria = "Decoracao", Estoque = 0 }
+        };
+
+        var resultado = produtos
+.Count(i => i.Categoria ==  "Eletronicos") //Conta tudo 
+.ToString();
+    }
+}
