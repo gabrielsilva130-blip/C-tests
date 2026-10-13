@@ -1,0 +1,28 @@
+using System; //Básico
+using System.Collections.Generic; //Lists
+using System.Net.Http; //Método HTTP, HttpClient e HttpResponseMessage 
+using System.Text.Json; //Depois usar para o JSON e transformar em objeto C# usável
+public class Cat
+{
+    public string id { get; set; }
+    public string url { get; set; }
+    public int width { get; set; }
+    public int height { get; set; }
+}
+
+class Princip{
+  static async Task Main() {
+    HttpClient client = new HttpClient(); //Classe HTTP para fazer aquisições http externas ao app
+    HttpResponseMessage response = await client.GetAsync("https://api.thecatapi.com/v1/images/search?limit=10");
+    Console.WriteLine(response.StatusCode);
+    string json = await response.Content.ReadAsStringAsync();
+    List<Cat> cats = JsonSerializer.Deserialize<List<Cat>>(json);
+    foreach(Cat cat in cats){
+        Console.WriteLine($"ID: {cat.id}");
+        Console.WriteLine($"URL: {cat.url}");
+        Console.WriteLine($"SIZE: {cat.height}x{cat.width}");
+        
+    }
+  }
+ 
+}

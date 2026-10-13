@@ -1,0 +1,38 @@
+Using System;
+Using.Net.Http; //Classe para fazer requisições Http
+Using.Text.Json; //JsonSerializer
+
+HttpClient client = new HttpClient(); //Aqui é a classe que manda nos métodos Http
+HttpResponseMessage Response = await client.GetAsync("https://api.thecatapi.com/v1/images/search?limit=3"); //HttpResponseMessage é a requisição Http bruta com tudo que um Http pode ter, conteúdo, status code, headers e etc... Get é o método Get, depois vou tentar fazer  Post
+Console.WriteLine(response.StatusCode); //Mostra se deu certo ou não
+
+string json = await response.Content.ReadAsStringAsync(); //Lê o JSON como uma String
+public class Cat {
+    public string Id { get; set; }
+    public string Url { get; set; }
+    public int Width { get; set; }
+    public int Height { get; set; }
+} //Esse molde serve no futuro para conseguir transformar o JSON em C# Object : )
+List<Cat> cats = JsonSerializer.Deserializer<List<Cat>>(json); //Transforma o Json em uma lista de gatos : )
+... Vamos arrumar agora:
+Using System.Net.Http;
+using System.Text.Json;
+Public class cat{
+    public string Id { get; set; }
+    public string Url { get; set; }
+    public int Width { get; set; }
+    public int Height { get; set; }
+}
+class Program{
+static async Task Main(){
+HttpClient client = new HttpClient();
+HttpResponseMessage message = await client.GetAsync("https://api.thecatapi.com/v1/images/search");
+string json = await response.Content.ReadAsStringAsync();
+console.WriteLine(json);
+List<cat> cats = JsonSerializer.Deserealizer<List<cat>>(json);
+foreach(CAT in cats){
+Console.WriteLine($"ID: {cat.id}");
+Console.WriteLine($"URL: {cat.Url}");
+Console.WriteLine($"Tamanho: {cat.Width}x{cat.Height}");
+}
+}

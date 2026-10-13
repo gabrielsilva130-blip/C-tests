@@ -1,0 +1,46 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Net.Http;
+public class PokemonItem {
+    public string name { get; set; }
+    public string url { get; set; }
+}
+
+public class PokemonEnvelop {
+	public int count {get; set;}
+	public List<PokemonItem> results {get; set;}
+}
+class HelloWorld {
+	static async Task Main() {
+		HttpClient client = new HttpClient();
+		Random random = new Random(); //Calma compilador, eu vou usar depois, por enquanto está de decoração S2
+		HttpResponseMessage response = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon"); //Não mexer
+		Console.WriteLine(response.StatusCode); //Não mexer
+		string json = await response.Content.ReadAsStringAsync(); //Não mexer
+
+
+
+
+		PokemonEnvelop PokeAPI = JsonSerializer.Deserialize<PokemonEnvelop>(json);
+		int RandomizerNumber = random.Next(0, PokeAPI.count);
+		Console.WriteLine($"Pokemon: {PokeAPI.result[RandomizerNumber]}");
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

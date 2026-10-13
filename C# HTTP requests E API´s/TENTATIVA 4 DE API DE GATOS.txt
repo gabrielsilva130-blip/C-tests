@@ -1,0 +1,60 @@
+using System.Text.Json;
+using System.Net.Http;
+using System.Collections.Generic;
+using System;
+using System.Threading.Tasks;
+class Pages{
+    public string url {get; set;}
+    public string label {get;set;} 
+}
+class CatsFacts{
+    public string fact {get; set;}
+    public int length {get; set;}
+}
+class EnvolpeCats{
+    public int current_page {get; set;}
+    public List<CatsFacts> data {get; set;}
+    public List<Pages> links {get; set;}
+}
+class HelloWorld {
+	static async Task Main() {
+	    int value = 0;
+	    HttpClient client = new HttpClient();
+        Random random = new Random();
+	    HttpResponseMessage response = await client.GetAsync("https://catfact.ninja/facts");
+        string json = await response.Content.ReadAsStringAsync();
+        EnvolpeCats CuteCat = JsonSerializer.Deserialize<EnvolpeCats>(json);
+        foreach(CatsFacts Fact in CuteCat.data){
+            Console.WriteLine(Fact.fact);
+        }
+       
+        
+        foreach(Pages page in CuteCat.links){
+            try{
+                if (string.IsNullOrEmpty(page.url)) {
+                        Console.WriteLine($"[AVISO] Pulando link '{page.label}' pois a URL é nula!");
+                        continue;
+            }
+            response = await client.GetAsync(page.url);
+            json = await response.Content.ReadAsStringAsync();
+            EnvolpeCats CuteFacts = JsonSerializer.Deserialize<EnvolpeCats>(json);
+            value = CuteFacts.data.Count;
+            Console.WriteLine(CuteFacts.data[random.Next(0,value)].fact);
+            Console.WriteLine(CuteFacts.data[random.Next(0,value)].fact);
+            Console.WriteLine(CuteFacts.data[random.Next(0,value)].fact);
+            }
+            catch (HttpRequestException httpEx) {
+                    // Captura erros específicos de REDE/HTTP (ex: sem internet, site fora do ar)
+                    Console.WriteLine($"[ERRO DE REDE] Falha ao acessar {page.url}: {httpEx.Message}");
+                }
+                catch (JsonException jsonEx) {
+                    // Captura erros de formatação do JSON
+                    Console.WriteLine($"[ERRO DE JSON] Falha ao converter resposta: {jsonEx.Message}");
+                }
+                catch (Exception ex) {
+                    // Captura QUALQUER outro erro inesperado
+                    Console.WriteLine($"[ERRO INESPERADO] {ex.GetType()}: {ex.Message}");
+                }
+        }   
+    }
+}

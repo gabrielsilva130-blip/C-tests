@@ -1,0 +1,31 @@
+using System.Text.Json;
+using System.Net.Http;
+using System.Collections.Generic;
+using System;
+using System.Threading.Tasks;
+class Pages{
+    public string url {get; set;}
+    public string label {get;set;} 
+}
+class CatsFacts{
+    public string fact {get; set;}
+    public int length {get; set;}
+}
+class EnvolpeCats{
+    public int current_page {get; set;}
+    public List<CatsFacts> data {get; set;}
+    public List<Pages> links {get; set;}
+}
+class HelloWorld {
+	static async Task Main() {
+	    HttpClient client = new HttpClient();
+        Random random = new Random();
+	    HttpResponseMessage response = await client.GetAsync("https://catfact.ninja/facts");
+        string json = await response.Content.ReadAsStringAsync();
+        EnvolpeCats CuteCat = JsonSerializer.Deserialize<EnvolpeCats>(json);
+        foreach(CatsFacts Fact in CuteCat.data){
+            Console.WriteLine(Fact.fact);
+        }
+        
+	}
+}
